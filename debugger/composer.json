@@ -17,6 +17,9 @@
     "autoload": {
         "psr-4": {
             "Debugger\\": "src/"
-        }
+        },
+        "files": [
+            "src/functions.php"
+        ]
     }
 }
