@@ -1,5 +1,6 @@
 {
     "name": "gabycrolage/debugger",
+    "version": "0.1",
     "type": "package",
     "require": {
         "php": ">=7.3.0"
