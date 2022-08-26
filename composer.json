@@ -12,6 +12,7 @@
             "homepage": "https://graab.fr"
         }
     ],
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "Debugger\\": "src/"
