@@ -1,5 +1,4 @@
 <?php
-
 use Debugger\DD;
 
 if( !function_exists('dd')){
