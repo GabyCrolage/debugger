@@ -1,7 +1,7 @@
 <?php
 use Debugger\DD;
 
-echo 'OKidoki';
+echo 'OKi';
 
 if( !function_exists('dd')){
     function dd( $data ){
