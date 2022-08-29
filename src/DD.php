@@ -5,8 +5,8 @@ namespace Debugger;
 class DD {
     
     private static $data = [];
-    
-    public static function dump( $args, $name ){
+
+    public static function set( $args, $name ){
         if( is_bool($args) ){
             $args = $args ? 'true' : 'false';
         }  
@@ -16,10 +16,17 @@ class DD {
             'data' => $args,
         );
         self::$data[] = $dd;
+    } 
+    
+    public static function dump( $args, $name ){
+        self::set($args, $name);
+        echo "<pre>";
+        print_r( self::$data );
+        echo "</pre>";
     }
     
     public static function die_dump( $args, $name ){
-        self::dump( $args, $name );
+        self::set($args, $name);
         self::print( true );
     }
     
@@ -83,57 +90,31 @@ class DD {
         return $response;
     }
 
-    private static function userInfo(){
-        $html = "<div id='dd_util'>";
-        $util = get_session('util');
-        if( $util ){
-            $mail = $util['email'] ?? '';
-            $id = $util['id'] ?? '';
-            $connecte = $util['connecte'] ?? null;
-            if( $connecte ) $html .= "Connecté : ";
-            else $html .= "En cours de connexion : ";
-            $html .= "$mail [$id]";
-        } else {
-            $html .= "<i>Pas d'util connecté</i>";
-        }
-
-        $html .= "</div>";
-        return $html;
-    }
-
     public static function print( $fullscreen = false ){
-        self::debug_vars();
-        $html = "<style>" . file_get_contents( __DIR__ . '/assets/css/dd.css') . "</style>";
-        $class = $fullscreen ? "class='full'" : '';
-        $html .= "<div id='dd'$class>";
-        // Header
-        $html .= "<div id='dd_header'><h1>V3 DEBUGGER (1.0)</h1>";
-        $html .= self::userInfo();
-        $html .= "<button id='dd_hide'>[x]</button></div>";
 
-        // CONTENT
-        $html .= "<div id='dd_content'>";    
-            if( !$fullscreen ) $html .= "";
-            $html .= "";
-            $html .= "<div id='dd_container'>";
-            foreach( self::$data as $d ){
-                $html .= self::display( $d );
-            }
-            $html .= "</div>";
-        $html .= "</div></div>";
-        $html .= '<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>';
-        $html .= '<script src="/V3/app/classes/DD/assets/js/dd.js"></script>';
-        if( $fullscreen ) {
-            echo $html;
-            exit();
-        } else {
-            return $html;
-        }
-    }
+        $html_content = "<div id='dd'>";
+            $html_content .= "<style>" . file_get_contents( __DIR__ . '/assets/css/dd.css') . "</style>";
+                // HEADER
+                $html_content .= "<div id='dd_header'>";
+                $html_content .= "GabyCrolage DieDump v1.0";
+                $html_content .= "</div>"; // dd_header
+            
+                // CONTENT
+                $html_content .= "<div id='dd_content'>";    
+                if( !$fullscreen ) $html_content .= "";
+                $html_content .= "";
+                $html_content .= "<div id='dd_container'>";
+                foreach( self::$data as $d ){
+                    $html_content .= self::display( $d );
+                }
+                $html_content .= "</div>"; // dd_container
+                $html_content .= "</div>"; // dd_content
 
-    static function debug_vars(){
-        self::dump( $_SESSION, 'Session' );
-    }
+            $html_content .= '<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>';
+            $html_content .= '<script>' . file_get_contents(__DIR__ . '/assets/js/dd.js') . '</script>';
+        $html_content .= "</div>"; // dd_main_container
 
-    
+        echo $html_content;
+        exit();
+    }    
 }
