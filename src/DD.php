@@ -5,6 +5,7 @@ namespace Debugger;
 class DD {
     
     private static $data = [];
+    private static $expand = false;
 
     public static function set( $args, $name ){
         if( is_bool($args) ){
@@ -17,6 +18,10 @@ class DD {
         );
         self::$data[] = $dd;
     } 
+
+    public static function expand(bool $expand ){
+        self::$expand = $expand; 
+    }
     
     public static function dump( $args, $name ){
         self::set($args, $name);
@@ -76,8 +81,9 @@ class DD {
         $type= gettype( $data );
         $data_len = count( (array) $data );
         $response = "<iterable-item>$type ($data_len)</iterable-item>";
-        if( $data_len > 0) $response .= "<unfold onclick=\"unfold(this,'$id')\"></unfold> ";
-        $response .= "<div id='$id' class='container'>";
+        if( $data_len > 0 && !self::$expand ) $response .= "<unfold onclick=\"unfold(this,'$id')\"></unfold> ";
+        $unfolded = self::$expand ? 'unfold' : '';
+        $response .= "<div id='$id' class='container $unfolded'>";
         foreach($iterate as $k => $v){
             $response .= "<div class='iterable'>";
             $response .= is_int( $k ) ? "<number>$k</number>" : "#<key>$k</key>";

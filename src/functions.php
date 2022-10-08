@@ -12,3 +12,9 @@ if( !function_exists( 'dd') ){
         DD::die_dump( $args, $name );
     }
 }
+
+if( !function_exists( 'dd_expand') ){
+    function dd_expand( bool $expand ){
+        DD::expand( $expand );
+    }
+}
